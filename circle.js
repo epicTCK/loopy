@@ -1,4 +1,4 @@
-class Circle extends Array.prototype {
+class Circle extends Array {
     constructor(){
      super();
     }
