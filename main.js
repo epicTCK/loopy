@@ -36,7 +36,7 @@ function interpret(source){
             }
         }
         //For loops
-        if(char === "["){
+        if(char === "{"){
             var x = sourceSplit.splice(sourceSplit.indexOf("{"), sourceSplit.indexOf("}"));
             x.shift();
             x.pop();
@@ -89,7 +89,7 @@ function subtract(){
     && typeof Number(tempVar) !== "number")
     throw "attempted to preform subtraction on non-numbers";
     
-    circle.push(circle.pop() - tempVar);
+    circle.push(circle.pop() - tempVar);//TODO: try this program: @^#@{-,} it gives wierd results
 }
 function multiply(){
     if(typeof Number(circle.peek()) !== "number" 
