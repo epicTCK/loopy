@@ -46,13 +46,24 @@ function interpret(source){
                 }
             }
         }
+        //String literals
         if(sourceSplit[i] === "\""){
             var x = sourceSplit.splice(sourceSplit.indexOf("\""),sourceSplit.indexOf("\'")- sourceSplit.indexOf("\"") + 1);
             x.shift();
             x.pop();   
             circle.push(x.join``);
         }
-
+        //Int literals
+        if(sourceSplit[i].match(/[0-9]/)){
+            for(let j=0;; j++){
+                if(!sourceSplit[i+j].match(/[0-9]/)){
+                     circle.push(Number(sourceSplit.splice(i, j-1).join``));
+                     break;
+                }
+            }
+            
+        
+        }
         //Normal execution
         commands.get(sourceSplit[i])();
     }
