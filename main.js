@@ -23,10 +23,10 @@ commands.set("@", inputNum);
 
 function interpret(source){
     let sourceSplit = source.split``;
-    for(let char of sourceSplit){
+    for(let i = 0; i < sourceSplit.length; i++){
         //While loops
-        if(char === "["){
-            var x = sourceSplit.splice(sourceSplit.indexOf("["), sourceSplit.indexOf("]"));
+        if(sourceSplit[i] === "["){
+            var x = sourceSplit.splice(sourceSplit.indexOf("["),sourceSplit.indexOf("]")- sourceSplit.indexOf("[") + 1);
             x.shift();
             x.pop();
             while(whileBool){
@@ -36,8 +36,8 @@ function interpret(source){
             }
         }
         //For loops
-        if(char === "{"){
-            var x = sourceSplit.splice(sourceSplit.indexOf("{"), sourceSplit.indexOf("}"));
+        if(sourceSplit[i] === "{"){
+            var x = sourceSplit.splice(sourceSplit.indexOf("{"),sourceSplit.indexOf("}")- sourceSplit.indexOf("{") + 1);
             x.shift();
             x.pop();
             for(;forCounter > 0; forCounter--){
@@ -46,9 +46,15 @@ function interpret(source){
                 }
             }
         }
+        if(sourceSplit[i] === "\""){
+            var x = sourceSplit.splice(sourceSplit.indexOf("\""),sourceSplit.indexOf("\'")- sourceSplit.indexOf("\"") + 1);
+            x.shift();
+            x.pop();   
+            circle.push(x.join``);
+        }
 
         //Normal execution
-        commands.get(char)();
+        commands.get(sourceSplit[i])();
     }
 }
 function popToTemp(){
