@@ -47,13 +47,25 @@ function rotate(){
 function add(){
     circle.push(circle.pop() + tempVar);
 }
-//TODO: check type and add error handling
 function subtract(){
+    if(typeof circle.peek !== "number" 
+    && typeof tempVar !== "number")
+    throw "attempted to preform subtraction on non-numbers";
+    
     circle.push(circle.pop() - tempVar);
 }
 function multiply(){
+    if(typeof circle.peek !== "number" 
+    && typeof tempVar !== "number")
+    throw "attempted to preform multiplication on non-numbers";
+
     circle.push(circle.pop() * tempVar);
+
 }
 function divide(){
+    if(typeof circle.peek !== "number" 
+    && typeof tempVar !== "number")
+    throw "attempted to preform division on non-numbers";
+
     circle.push(circle.pop() / tempVar);
 }
