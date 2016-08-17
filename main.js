@@ -46,6 +46,14 @@ function interpret(source){
                 }
             }
         }
+         if(sourceSplit[i] === "("){
+            var x = sourceSplit.splice(sourceSplit.indexOf("("),sourceSplit.indexOf(")")- sourceSplit.indexOf("(") + 1);
+            x.shift();
+            x.pop();
+            if(circle.peek() === tempVar){
+                interpret(x.join``);
+            }
+        }
         //String literals
         if(sourceSplit[i] === "\""){
             var x = sourceSplit.splice(sourceSplit.indexOf("\""),sourceSplit.indexOf("\'")- sourceSplit.indexOf("\"") + 1);
