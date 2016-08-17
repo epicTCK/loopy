@@ -1,5 +1,6 @@
 var circle = new Circle();
 var tempVar;
+var whileBool = true;
 var commands = new Map();
 commands.set("^", popToTemp);
 commands.set("_", pushTemp);
@@ -13,10 +14,25 @@ commands.set("+", add);
 commands.set("-", subtract);
 commands.set("*", multiply);
 commands.set("/", divide);
+commands.set("<", rotate2);
+commands.set("&", toggleWhile);
 
 
 function interpret(source){
-    for(let char of source.split``){
+    let sourceSplit = source.split``;
+    for(let char of sourceSplit){
+        //While loops
+        if(char === "["){
+            var x = sourceSplit.splice(sourceSplit.indexOf("["), sourceSplit.indexOf("]"));
+            x.split();
+            x.pop();
+            while(whileBool){
+                for(let char2 of x){
+                    commands.get(char2)();
+                }
+            }
+        }
+
         commands.get(char)();
     }
 }
@@ -44,6 +60,9 @@ function peekToTemp(){
 function rotate(){
     circle.rotate();
 }
+function rotate2(){
+    circle.rotate2();
+}
 function add(){
     circle.push(circle.pop() + tempVar);
 }
@@ -68,4 +87,7 @@ function divide(){
     throw "attempted to preform division on non-numbers";
 
     circle.push(circle.pop() / tempVar);
+}
+function toggleWhile(){
+    whileBool = !whileBool;
 }

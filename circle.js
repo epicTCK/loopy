@@ -5,6 +5,9 @@ class Circle extends Array {
     rotate(){
         this.push(this.shift());
     }
+    rotate2(){
+        this.unshift(this.pop());
+    }
     peek(){
         let x = this.pop();
         this.push(x);
