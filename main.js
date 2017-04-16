@@ -38,7 +38,7 @@ function rotate2() {
 }
 
 function add() {
-    circle.push(circle.pop() + tempVar) ک
+    circle.push(circle.pop() + tempVar);
 }
 
 function subtract() {
@@ -69,12 +69,16 @@ function toggleWhile() {
 function setForCounter() {
     forCounter = tempVar;
 }
+
+function pushForLoopCounter() {
+    circle.push(forCounter);
+}
 commands.set("^", popToTemp);
 commands.set("_", pushTemp);
 commands.set("!", pop);
 commands.set(".", popPrint);
 commands.set(",", print);
-commands.set(":", peekToTmp);
+commands.set(":", peekToTemp);
 commands.set(">", rotate);
 commands.set("+", add);
 commands.set("-", subtract);
@@ -83,6 +87,7 @@ commands.set("/", divide);
 commands.set("<", rotate2);
 commands.set("&", toggleWhile);
 commands.set("#", setForCounter);
+commands.set("~", pushForLoopCounter);
 
 function run(source, input) {
     circle = input ? Circle.from(input) : new Circle();
@@ -91,59 +96,58 @@ function run(source, input) {
 
 function interpret(source) {
     let sourceSplit = source.split("");
-    for (let i = 0; i < sourceSplit.length; i++) {
+    while (sourceSplit.length > 0) {
         //While loops
-        if (sourceSplit[i] === "[") {
-            var x = sourceSplit.splice(sourceSplit.indexOf("["), sourceSplit.indexOf("]") - sourceSplit.indexOf("[") + 1);
+        if (sourceSplit[0] === "[") {
+            var x = sourceSplit.splice(0, sourceSplit.indexOf("]") + 1);
             x.shift();
             x.pop();
             while (whileBool) {
-                for (let char2 of x) {
-                    commands.get(char2)();
-                }
+                interpret(x.join(""));
             }
+            continue;
         }
         //For loops
-        if (sourceSplit[i] === "{") {
-            var x = sourceSplit.splice(sourceSplit.indexOf("{"), sourceSplit.indexOf("}") - sourceSplit.indexOf("{") + 1);
+        if (sourceSplit[0] === "{") {
+            var x = sourceSplit.splice(0, sourceSplit.indexOf("}") + 1);
             x.shift();
             x.pop();
             for (; forCounter > 0; forCounter--) {
-                for (let char2 of x) {
-                    commands.get(char2)();
-                }
+                interpret(x.join(""));
             }
+            continue;
         }
-        if (sourceSplit[i] === "(") {
-            var x = sourceSplit.splice(sourceSplit.indexOf("("), sourceSplit.indexOf(")") - sourceSplit.indexOf("(") + 1);
+        if (sourceSplit[0] === "(") {
+            var x = sourceSplit.splice(0, sourceSplit.indexOf(")") + 1);
             x.shift();
             x.pop();
             if (circle.peek() === tempVar) {
                 interpret(x.join(""));
             }
+            continue;
         }
         //String literals
-        if (sourceSplit[i] === "\"") {
-            var x = sourceSplit.splice(sourceSplit.indexOf("\""), sourceSplit.indexOf("\'") - sourceSplit.indexOf("\"") + 1);
+        if (sourceSplit[0] === "\"") {
+            var x = sourceSplit.splice(0, sourceSplit.indexOf("\'") + 1);
             x.shift();
             x.pop();
             circle.push(x.join(""));
+            continue;
         }
         //Int literals
-        if (sourceSplit[i].match(/[0-9]/)) {
-            for (let j = 0;; j++) {
-                if (!sourceSplit[i + j].match(/[0-9]/)) {
-                    circle.push(Number(sourceSplit.splice(i, j - 1).join("")));
+        if (sourceSplit[0].match(/[0-9]/)) {
+            let currentInt = sourceSplit.shift();
+            while (sourceSplit.length > 0) {
+                if (sourceSplit[0].match(/[0-9]/)) {
+                    currentInt += sourceSplit.shift();
+                } else {
                     break;
                 }
             }
+            circle.push(parseInt(currentInt));
             continue;
         }
-
         //Normal execution
-
-        commands.get(sourceSplit[i])();
-
+        commands.get(sourceSplit.shift())();
     }
-
 }
